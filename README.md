@@ -1,4 +1,4 @@
-### META-MATHWORKS
+### meta-mathworks
 This is the MathWorks Yocto layer to make it easier to interface MATLAB(R)/Simulink(TM) SoC Blockset software feature set with AMD-Xilinx FPGA SoC hardware platforms (like AMD-Xilinx Zynq-7000, Xilinx ZynqMPSoC, Xilinx ZynqRFSoC, Xilinx Versal).
 
 ### Dependencies
