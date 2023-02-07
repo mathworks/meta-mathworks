@@ -1,0 +1,59 @@
+#
+# MathWorks filesystem additions
+#
+DESCRIPTION = "Add files that interact with linux u-boot utils"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+
+RDEPENDS:${PN} += "u-boot-fw-utils"
+
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+SRC_URI += "file://common/
+"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+DEPENDS:append = " update-rc.d-native"
+
+do_install() {
+	install -d ${D}/${sysconfdir}/
+	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/udhcpd.conf
+
+	install -d ${D}${sysconfdir}/init.d
+	install -d ${D}${sysconfdir}/rcS.d
+	install -d ${D}${sysconfdir}/rc1.d
+	install -d ${D}${sysconfdir}/rc2.d
+	install -d ${D}${sysconfdir}/rc3.d
+	install -d ${D}${sysconfdir}/rc4.d
+	install -d ${D}${sysconfdir}/rc5.d
+
+	cp -r ${WORKDIR}/common/fs-overlay/etc/init.d/* ${D}${sysconfdir}/init.d
+	chmod -R 775 ${D}${sysconfdir}/init.d
+
+	update-rc.d -r ${D} symlink_init start 8 1 2 3 4 5 .
+	update-rc.d -r ${D} sdcard_mount start 9 1 2 3 4 5 .
+	update-rc.d -r ${D} module_coldplug start 11 1 2 3 4 5 .
+	update-rc.d -r ${D} network_scripts start 38 1 2 3 4 5 .
+	update-rc.d -r ${D} hostname start 39 1 2 3 4 5 .
+	update-rc.d -r ${D} usb_network start 39 1 2 3 4 5 .
+	update-rc.d -r ${D} network start 40 1 2 3 4 5 .
+	update-rc.d -r ${D} inetd start 41 1 2 3 4 5 .
+	update-rc.d -r ${D} udhcpd start 42 1 2 3 4 5 .
+	update-rc.d -r ${D} user_init start 97 1 2 3 4 5 .
+	update-rc.d -r ${D} user_app start 98 1 2 3 4 5 .
+	update-rc.d -r ${D} sdinit start 99 1 2 3 4 5 .
+
+	install -d ${D}/${sysconfdir}/ssh/
+	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}${sysconfdir}/ssh/
+
+	install -d ${D}/${sbindir}/
+	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}${sbindir}
+
+	install -d ${D}/${sysconfdir}/udev/rules.d/
+	cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}${sysconfdir}/udev/rules.d/
+}
+
+FILES:${PN} += "${sysconfdir}/*"
+FILES:${PN} += "${sbindir}/"
+INSANE_SKIP:${PN} += "installed-vs-shipped"
