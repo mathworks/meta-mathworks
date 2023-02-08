@@ -12,7 +12,7 @@ KERNELURI = "git://github.com/commodo/linux.git;protocol=https"
 # override kernel config file
 KBUILD_DEFCONFIG:versal = "xilinx_versal_defconfig"
 KBUILD_DEFCONFIG:zynq = "zynq_xcomm_adv7511_defconfig"
-KBUILD_DEFCONFIG:zynqmp = "adizynqmp_defconfig"
+KBUILD_DEFCONFIG:zynqmp = "xilinx_zynqmp_defconfig"
 KBUILD_DEFCONFIG:microblaze = "adi_mb_defconfig"
 
 # In adi_mb_defconfig, CONFIG_INITRAMFS_SOURCE is enabled by default.

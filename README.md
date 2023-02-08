@@ -41,3 +41,4 @@ petalinux-build
 
 petalinux-package --boot --fsbl --fpga --u-boot
 ```
+
