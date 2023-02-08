@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/common/fs-overlay/etc/:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files/zynqmp/fs-overlay/etc/:"
 SRC_URI += " file://fstab"
 
 do_install:append() {

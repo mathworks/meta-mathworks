@@ -9,7 +9,8 @@ RDEPENDS:${PN} += "u-boot-fw-utils"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://common/
+SRC_URI += "file://common/ \
+            file://zynqmp/ \
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -18,7 +19,15 @@ DEPENDS:append = " update-rc.d-native"
 
 do_install() {
 	install -d ${D}/${sysconfdir}/
+	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/bootvars.conf ${D}${sysconfdir}/bootvars.conf
 	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/udhcpd.conf
+
+	install -d ${D}/${sysconfdir}/profile.d/
+	cp -r ${WORKDIR}/zynqmp/fs-overlay/etc/profile.d/* ${D}${sysconfdir}/profile.d/
+
+	install -d ${D}/${sysconfdir}/bootvars.d/
+	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
+	cp -r ${WORKDIR}/zynqmp/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
 
 	install -d ${D}${sysconfdir}/init.d
 	install -d ${D}${sysconfdir}/rcS.d
@@ -40,6 +49,9 @@ do_install() {
 	update-rc.d -r ${D} network start 40 1 2 3 4 5 .
 	update-rc.d -r ${D} inetd start 41 1 2 3 4 5 .
 	update-rc.d -r ${D} udhcpd start 42 1 2 3 4 5 .
+	update-rc.d -r ${D} restoreSSHkeys start 49 1 2 3 4 5 .
+	update-rc.d -r ${D} backupSSHkeys start 51 1 2 3 4 5 .
+	update-rc.d -r ${D} hdlrd_init start 95 1 2 3 4 5 .
 	update-rc.d -r ${D} user_init start 97 1 2 3 4 5 .
 	update-rc.d -r ${D} user_app start 98 1 2 3 4 5 .
 	update-rc.d -r ${D} sdinit start 99 1 2 3 4 5 .
