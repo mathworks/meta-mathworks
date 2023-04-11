@@ -1,6 +1,7 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/common/fs-overlay/etc/:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files/etc:"
 
-SRC_URI += " file://fw_env.config"
+
+SRC_URI:append = " file://fw_env.config"
 
 do_install:append() {
 	install -d ${D}${sysconfdir}

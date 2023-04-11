@@ -2,7 +2,7 @@
 # Adds iiod to MathWorks filesystem
 #
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
-SRC_URI += " file://init.d/iiod"
+SRC_URI += " file://init.d/iiod "
 
 do_install:append() {
 	install -d ${D}${sysconfdir}/init.d
