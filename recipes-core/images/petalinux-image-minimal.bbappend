@@ -5,3 +5,4 @@ IMAGE_INSTALL:append = " avahi-utils avahi-daemon avahi-autoipd"
 IMAGE_INSTALL:append = " dtc"
 IMAGE_INSTALL:append = " procps"
 
+
