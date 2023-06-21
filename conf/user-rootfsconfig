@@ -3,3 +3,5 @@
 
 CONFIG_libserialport
 CONFIG_libiio
+CONFIG_boost
+CONFIG_lttng-ust
