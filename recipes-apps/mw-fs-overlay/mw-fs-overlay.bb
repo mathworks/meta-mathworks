@@ -47,19 +47,20 @@ do_install() {
 	fi
 	install -d ${D}/${sbindir}/
 	install -d ${D}/${systemd_system_unitdir}/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/init.d/* ${D}${sbindir}/
-	chmod -R 0755 ${D}${sbindir}/
-	cp -r ${WORKDIR}/common/fs-overlay/lib/systemd/system/* ${D}${systemd_system_unitdir}/
-	chmod -R 0644 ${WORKDIR}/common/fs-overlay/lib/systemd/system/* ${D}${systemd_system_unitdir}/
+	cp -r ${WORKDIR}/common/fs-overlay/etc/init.d/* ${D}/${sbindir}/
+	chmod -R 0755 ${D}/${sbindir}/
+	cp -r ${WORKDIR}/common/fs-overlay/lib/systemd/system/* ${D}/${systemd_system_unitdir}/
+	chmod -R 0644 ${WORKDIR}/common/fs-overlay/lib/systemd/system/* ${D}/${systemd_system_unitdir}/
+
 
 	install -d ${D}/${sysconfdir}/ssh/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}${sysconfdir}/ssh/
+	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}/${sysconfdir}/ssh/
 
 	install -d ${D}/${sbindir}/
-	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}${sbindir}
+	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}/${sbindir}/
 
 	install -d ${D}/${sysconfdir}/udev/rules.d/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}${sysconfdir}/udev/rules.d/
+	cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}/${sysconfdir}/udev/rules.d/
 }
 
 FILES:${PN} += "${sysconfdir}/*"
