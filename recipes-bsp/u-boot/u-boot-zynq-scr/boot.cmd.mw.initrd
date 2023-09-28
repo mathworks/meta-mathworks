@@ -32,8 +32,7 @@ if test -e ${devtype} ${devnum}:${distro_bootpart} ${bitstream_image}; then
 	load ${devtype} ${devnum}:${distro_bootpart} 0x1000000 ${bitstream_image};
 	fpga loadb ${devtype}:${devnum} 0x1000000 ${filesize};
 else
-	echo "FPGA fpga not found, exiting..."
-	exit;
+	echo "FPGA not found. Continue using default FPGA configuration in BOOT.BIN."
 fi
 
 # FIT Image booting... use image.ub
