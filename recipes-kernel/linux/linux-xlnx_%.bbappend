@@ -18,11 +18,10 @@ KERNEL_FEATURES:append = " bsp.cfg"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-SRC_URI:append += " file://bsp.cfg"
-KERNEL_FEATURES:append += " bsp.cfg"
-SRC_URI += "file://user_2022-05-23-16-27-00.cfg \
-            file://user_2022-06-15-16-56-00.cfg \
-            file://user_2022-07-05-15-54-00.cfg \
-            file://user_2022-07-05-16-34-00.cfg \
-            file://user_2022-08-25-16-58-00.cfg \
-            "
+SRC_URI:append = " file://bsp.cfg "
+KERNEL_FEATURES:append = " bsp.cfg "
+
+SRC_URI:append = " file://fpgamgr.cfg  \
+       file://iio_axidmac.cfg          \
+       file://kerneltracing.cfg        \
+       "
