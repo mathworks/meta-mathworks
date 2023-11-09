@@ -1,9 +1,9 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 DESCRIPTION = "MW kernel"
-LINUX_VERSION = "5.15.19"
-MW_VERSION = "lts"
-KBRANCH = "staging_v5.15_LTS"
-PV = "${LINUX_VERSION}-${MW_VERSION}+git${SRCPV}"
+LINUX_VERSION = "6.1.5"
+MW_VERSION = "mw-6.1.5"
+KBRANCH = "mw-6.1.5"
+PV = "${LINUX_VERSION}-xilinx-v2023.1-${MW_VERSION}+git${SRCPV}"
 
 SRCREV = "${@ "79f0591f4c8d7b8d202cf8d53758ae26f0ee662d" if bb.utils.to_boolean(d.getVar('BB_NO_NETWORK')) else d.getVar('AUTOREV')}"
 KERNELURI = "git://github.com/mathworks/xilinx-linux.git;protocol=https"
