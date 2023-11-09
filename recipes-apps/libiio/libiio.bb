@@ -2,7 +2,7 @@ SUMMARY = "Library for interfacing with IIO devices"
 HOMEPAGE = "https://wiki.analog.com/resources/tools-software/linux-software/libiio"
 BRANCH ?= "libiio-v0"
 SECTION = "libs"
-LICENSE = "LGPLv2.1+"
+LICENSE = "LGPL-2.1-or-later"
 LIC_FILES_CHKSUM = "file://COPYING.txt;md5=7c13b3376cea0ce68d2d2da0a1b3a72c"
 SRCREV = "${@ "c4498c27761d04d4ac631ec59c1613bfed079da5" if bb.utils.to_boolean(d.getVar('BB_NO_NETWORK')) else d.getVar('AUTOREV')}"
 SRC_URI = "git://github.com/analogdevicesinc/libiio.git;protocol=https;branch=${BRANCH}"
@@ -32,7 +32,7 @@ EXTRA_OECMAKE = " \
 EXTRA_OECMAKE += "-DCMAKE_SKIP_RPATH=TRUE"
 EXTRA_OECMAKE += "${@bb.utils.contains('DISTRO_FEATURES', 'zeroconf', '', '-DHAVE_DNS_SD=off', d)}"
 
-PACKAGECONFIG ??= "USB_BACKEND NETWORK_BACKEND PYTHON_BINDINGS TESTS"
+PACKAGECONFIG ??= "NETWORK_BACKEND PYTHON_BINDINGS TESTS"
 
 PACKAGECONFIG[USB_BACKEND] = "-DWITH_USB_BACKEND=ON,-DWITH_USB_BACKEND=OFF,libusb1,libxml2"
 PACKAGECONFIG[NETWORK_BACKEND] = "-DWITH_NETWORK_BACKEND=ON,-DWITH_NETWORK_BACKEND=OFF,libxml2"
