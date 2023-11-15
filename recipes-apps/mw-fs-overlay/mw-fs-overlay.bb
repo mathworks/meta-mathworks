@@ -52,10 +52,6 @@ do_install() {
 	cp -r ${WORKDIR}/common/fs-overlay/lib/systemd/system/* ${D}/${systemd_system_unitdir}/
 	chmod -R 0644 ${WORKDIR}/common/fs-overlay/lib/systemd/system/* ${D}/${systemd_system_unitdir}/
 
-
-	install -d ${D}/${sysconfdir}/ssh/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}/${sysconfdir}/ssh/
-
 	install -d ${D}/${sbindir}/
 	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}/${sbindir}/
 
