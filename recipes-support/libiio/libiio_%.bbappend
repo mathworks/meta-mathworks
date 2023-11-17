@@ -14,6 +14,7 @@ EXTRA_OECMAKE += " \
 	-DCPP_BINDINGS=ON \
 	-DFLEX_TARGET_ARG_COMPILE_FLAGS='--noline' \
 	-DBISON_TARGET_ARG_COMPILE_FLAGS='--no-lines' \
+	-DWITH_TESTS=ON \
 "
 
 inherit update-rc.d pkgconfig

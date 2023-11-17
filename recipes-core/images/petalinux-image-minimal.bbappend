@@ -1,6 +1,6 @@
 IMAGE_INSTALL:append = " boost"
 IMAGE_INSTALL:append = " libubootenv-bin"
-IMAGE_INSTALL:append = " libiio libiio-iiod libserialport "
+IMAGE_INSTALL:append = " libusb-compat libserialport libiio libiio-iiod libiio-tests "
 IMAGE_INSTALL:append = " lttng-ust lttng-ust-bin lttng-tools lttng-modules"
 IMAGE_INSTALL:append = " avahi-utils avahi-daemon avahi-autoipd"
 IMAGE_INSTALL:append = " dtc"
