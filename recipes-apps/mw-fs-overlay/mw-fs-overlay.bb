@@ -35,12 +35,13 @@ do_install() {
 	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
 		cp -r ${WORKDIR}/common/fs-overlay/etc/init.d/* ${D}${sysconfdir}/init.d
 		chmod -R 0755 ${D}${sysconfdir}/init.d
-		update-rc.d -r ${D} sdcard_mount start 9 1 2 3 4 5 .
+		update-rc.d -r ${D} sdcard_mount start 8 1 2 3 4 5 .
+		update-rc.d -r ${D} restoreSSHKeys start 9 1 2 3 4 5 .
 		update-rc.d -r ${D} network_scripts start 38 1 2 3 4 5 .
 		update-rc.d -r ${D} hostname start 39 1 2 3 4 5 .
 		update-rc.d -r ${D} usb_network start 39 1 2 3 4 5 .
 		update-rc.d -r ${D} network start 40 1 2 3 4 5 .
-		update-rc.d -r ${D} inetd start 41 1 2 3 4 5 .
+		update-rc.d -r ${D} backupSSHKeys start 51 1 2 3 4 5 .
 		update-rc.d -r ${D} user_init start 97 1 2 3 4 5 .
 		update-rc.d -r ${D} user_app start 98 1 2 3 4 5 .
 		update-rc.d -r ${D} sdinit start 99 1 2 3 4 5 .
