@@ -1,6 +1,4 @@
 #include "zynqmp-zcu111-revA.dts"
-//#include "system.dts"
-
 / {
 	chosen {
 		bootargs = "earlycon root=/dev/ram rw";
@@ -11,5 +9,5 @@
 #include "zynqmp-mw-common.dtsi"
 #include "mw-aximm-common.dtsi"
 &mwipcore0 {
-	reg = <0xA0020000 0xffff>;
+	reg = <0xA0000000 0xffff>;
 };
