@@ -26,9 +26,11 @@ GETTY_SYSTEMD_UNITS ?= " \
 "
 #  Modify the systemd unit configuration files
 l_enable_autologin () {
-	if [ -f ${GETTY_SYSTEMD_UNITS} ]; then
-	    sed -i -e 's/^\(ExecStart *=.*getty \)/\1--autologin root /' ${GETTY_SYSTEMD_UNITS}
-	fi
+	for unit in ${GETTY_SYSTEMD_UNITS}; do
+		if [ -f $unit ]; then
+		    sed -i -e 's/^\(ExecStart *=.*getty \)/\1--autologin root /' $unit
+		fi
+	done
 	if [ -f ${GETTY_SYSVINIT_UNIT} ]; then
 	    sed -i 's/\/bin\/start_getty\(.*\)/\/sbin\/getty\1 -a root/' ${GETTY_SYSVINIT_UNIT} 
 	fi
