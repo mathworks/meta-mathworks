@@ -2,9 +2,9 @@
 
 [Unit]
 Documentation=man:systemd-sysv-generator(8)
-SourcePath=/usr/sbin/user_init
-Before=user_app.service
-After=inetd.service
+SourcePath=/usr/sbin/user_app
+Before=sdinit.service
+After=usb_network.service
 
 [Service]
 Type=forking
@@ -14,8 +14,8 @@ IgnoreSIGPIPE=no
 KillMode=process
 GuessMainPID=no
 RemainAfterExit=yes
-ExecStart=/usr/sbin/user_init start
-ExecStop=/usr/sbin/user_init stop
+ExecStart=/usr/sbin/user_app start
+ExecStop=/usr/sbin/user_app stop
 StandardOutput=journal+console
 
 [Install]

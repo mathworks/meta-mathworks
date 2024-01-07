@@ -4,21 +4,15 @@
 SourcePath=/usr/sbin/sdcard_mount
 Before=rescue.target
 Before=multi-user.target
-Before=multi-user.target
-Before=multi-user.target
-Before=graphical.target
 Before=user_init.service
 Before=network_scripts.service
 Before=usb_network.service
 Before=sdinit.service
-Before=inetd.busybox.service
 Before=hostname.service
 Before=nfscommon.service
 Before=user_app.service
 Before=dropbear.service
-Before=nfsserver.service
 Before=network.service
-Before=inetd.service
 
 [Service]
 Type=forking

@@ -2,13 +2,8 @@
 
 [Unit]
 Documentation=man:systemd-sysv-generator(8)
-SourcePath=/usr/sbin/sdinit
-Before=rescue.target
-Before=multi-user.target
-Before=multi-user.target
-Before=multi-user.target
-Before=graphical.target
-After=user_init.service
+SourcePath=/usr/sbin/inetd
+After=network.service
 
 [Service]
 Type=forking
@@ -18,8 +13,8 @@ IgnoreSIGPIPE=no
 KillMode=process
 GuessMainPID=no
 RemainAfterExit=yes
-ExecStart=/usr/sbin/sdinit start
-ExecStop=/usr/sbin/sdinit stop
+ExecStart=/usr/sbin/inetd start
+ExecStop=/usr/sbin/inetd stop
 StandardOutput=journal+console
 
 [Install]
