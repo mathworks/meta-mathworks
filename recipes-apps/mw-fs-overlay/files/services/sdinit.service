@@ -2,8 +2,10 @@
 
 [Unit]
 Documentation=man:systemd-sysv-generator(8)
-SourcePath=/usr/sbin/user_app
-Before=sdinit.service
+SourcePath=/usr/sbin/sdinit
+Before=rescue.target
+Before=multi-user.target
+Before=graphical.target
 After=user_init.service
 
 [Service]
@@ -14,8 +16,8 @@ IgnoreSIGPIPE=no
 KillMode=process
 GuessMainPID=no
 RemainAfterExit=yes
-ExecStart=/usr/sbin/user_app start
-ExecStop=/usr/sbin/user_app stop
+ExecStart=/usr/sbin/sdinit start
+ExecStop=/usr/sbin/sdinit stop
 StandardOutput=journal+console
 
 [Install]
