@@ -1,11 +1,12 @@
 IMAGE_INSTALL:append = " boost"
 IMAGE_INSTALL:append = " libubootenv-bin"
+IMAGE_INSTALL:append = " busybox-udhcpd busybox-udhcpc busybox-inetd"
 IMAGE_INSTALL:append = " libiio libiio-iiod libserialport "
 IMAGE_INSTALL:append = " lttng-ust lttng-ust-bin lttng-tools lttng-modules"
 IMAGE_INSTALL:append = " avahi-utils avahi-daemon avahi-autoipd"
 IMAGE_INSTALL:append = " dtc"
 IMAGE_INSTALL:append = " procps"
-# IMAGE_INSTALL:append = " rftool"
+IMAGE_INSTALL:append = " libsysfs sysfsutils libmetal libconfig"
 
 inherit extrausers
 # Set root password as "root" (argument -p for usermod is obtained using 'mkpasswd -m sha-512 root')
