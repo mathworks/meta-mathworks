@@ -48,7 +48,17 @@ do_install() {
 
 	if [ "${@bb.utils.contains('INIT_MANAGER','systemd','yes','no',d)}" = "yes" ]; then
 		echo "Installing MW systemd services..."
-		find ${WORKDIR}/common/fs-overlay/etc/init.d/ -type f ! -name inetd -exec cp -r {} ${D}${sbindir}/ \;
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network_scripts  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdcard_mount  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdinit  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/usb_network ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_app ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_init ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_init ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/start_only.sh ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/start_only.sh ${D}${sysconfdir}/init.d/
 		chmod -R 0755 ${D}${sbindir}/
 		install -d ${D}${systemd_system_unitdir}/

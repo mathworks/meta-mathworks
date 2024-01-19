@@ -2,7 +2,7 @@
 
 [Unit]
 Documentation=man:systemd-sysv-generator(8)
-SourcePath=/usr/sbin/hostname
+SourcePath=/usr/sbin/update_hostname
 Before=network.service
 After=usb_network.service
 
@@ -14,8 +14,8 @@ IgnoreSIGPIPE=no
 KillMode=process
 GuessMainPID=no
 RemainAfterExit=yes
-ExecStart=/usr/sbin/hostname start
-ExecStop=/usr/sbin/hostname stop
+ExecStart=/usr/sbin/update_hostname start
+ExecStop=/usr/sbin/update_hostname stop
 StandardOutput=journal+console
 
 [Install]
