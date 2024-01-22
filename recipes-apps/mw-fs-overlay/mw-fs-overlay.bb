@@ -26,12 +26,19 @@ SRC_URI = " file://common file://zynqmp \
 	file://services/usb_network.service \
 	file://services/user_app.service \
 	file://services/user_init.service \
+	file://services/backupSSHKeys.service \
+	file://services/restoreSSHKeys.service \
 	"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 DEPENDS:append = " update-rc.d-native"
 
-SYSTEMD_SERVICE:${PN} = "sdcard_mount.service usb_network.service sdinit.service network.service network_scripts.service udhcpd.service inetd.service user_app.service nfs-common.service hostname.service"
+SYSTEMD_SERVICE:${PN} = "sdcard_mount.service usb_network.service \
+			sdinit.service network.service \
+			network_scripts.service udhcpd.service \
+			inetd.service user_app.service \
+			nfs-common.service hostname.service \
+			backupSSHKeys.service restoreSSHKeys.service"
 
 do_install() {
 	chmod -R 0755 ${WORKDIR}/common/fs-overlay/usr/sbin/
@@ -49,6 +56,7 @@ do_install() {
 	if [ "${@bb.utils.contains('INIT_MANAGER','systemd','yes','no',d)}" = "yes" ]; then
 		echo "Installing MW systemd services..."
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network_scripts  ${D}${sbindir}/
