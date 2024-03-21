@@ -20,9 +20,7 @@ do_install:append() {
 	ln -s ../sbin/mw_setboot mw_setboot 
 	ln -s ../sbin/_mw_setboot_default _mw_setboot_default 
 	ln -s ../sbin/_mw_setbootfile _mw_setbootfile 
-	if [ ! -f ${D}${bindir}/reboot ]; then
-		ln -s ../../sbin/reboot reboot
-	fi
+	ln -s ../sbin/reboot-script.sh reboot
 }
  
 
