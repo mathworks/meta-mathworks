@@ -68,7 +68,6 @@ do_install() {
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_init ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/start_only.sh ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/start_only.sh ${D}${sysconfdir}/init.d/
-		chmod -R 0755 ${D}${sbindir}/
 		install -d ${D}${systemd_system_unitdir}/
 		cp -r ${WORKDIR}/services/* ${D}${systemd_system_unitdir}/
 	else
@@ -98,6 +97,7 @@ do_install() {
 	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}/${sysconfdir}/ssh/
 
 	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}/${sbindir}/
+	chmod -R 0755 ${D}${sbindir}/
 
 	install -d ${D}/${sysconfdir}/udev/rules.d/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}/${sysconfdir}/udev/rules.d/
