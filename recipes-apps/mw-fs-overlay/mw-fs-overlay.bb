@@ -93,9 +93,6 @@ do_install() {
 		update-rc.d -r ${D} sdinit start 99 1 2 3 4 5 .
 	fi
 
-	install -d ${D}/${sysconfdir}/ssh/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}/${sysconfdir}/ssh/
-
 	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}/${sbindir}/
 	chmod -R 0755 ${D}${sbindir}/
 
