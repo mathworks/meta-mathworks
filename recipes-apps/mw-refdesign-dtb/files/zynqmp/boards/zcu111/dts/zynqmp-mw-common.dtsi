@@ -1,0 +1,15 @@
+/{
+	core_clkwiz: clockwiz0 {
+		compatible = "fixed-clock";
+		#clock-cells = <1>;
+		clock-frequency = < 0x2faf080 >; // 50 MHz
+	};
+};
+
+&fpga_axi {
+		mwipcore0: mwipcore@A0000000 {
+			compatible = "mathworks,mwipcore-v3.00";
+			reg = <0xA0020000 0x10000>;
+		};
+};
+

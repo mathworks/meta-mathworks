@@ -9,17 +9,10 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 DEPENDS = "virtual/kernel cmake-native dtc-native"
 
 # Specify the source files and other details as needed
-SRC_URI = " file://base.dtsi \
-	file://axilite.dts \
-	file://axistream.dts \
-	file://axistream_64.dts \
-	file://dlhdl.dts \
-	file://sharedmem_iio.dts \
-	file://CMakeLists.txt \
+SRC_URI = " file://CMakeLists.txt \
 	file://common \
 	file://zynqmp \
-	file://zynq \
-"
+	file://zynq"
 
 S = "${WORKDIR}"
 
@@ -28,17 +21,18 @@ inherit deploy
 inherit cmake
 
 # Pass the architecture and cross-compile prefix to CMake
-EXTRA_OECMAKE = " -DKERNEL_DIR=${STAGING_KERNEL_DIR} -DARCH=${KERNEL_ARCH} -DCROSS_COMPILE=${TARGET_PREFIX}"
-
-do_install() {
-	install -d ${D}/boot/mwdtbs
-	install -Dm 0644 ${B}/*.dtb ${D}/boot/mwdtbs/
-}
+EXTRA_OECMAKE = " -DKERNEL_DIR=${STAGING_KERNEL_DIR} -DMACHINE_OVERRIDES=${MACHINEOVERRIDES} -DCROSS_COMPILE=${TARGET_PREFIX} "
 
 do_deploy() {
-	install -d ${D}/boot/mwdtbs
-	install -Dm 0644 ${B}/*.dtb ${D}/boot/mwdtbs/
+        install -d ${DEPLOYDIR}
+	install -d ${DEPLOYDIR}/boot/mwdtbs
+	install -Dm 0644 ${B}/*.dtb ${DEPLOYDIR}/boot/mwdtbs/
 }
+
+do_install() {
+	:
+}
+addtask deploy after do_compile before do_build
 
 FILES:${PN} += "/boot/mwdtbs/*.dtb"
 INSANE_SKIP:${PN} += "installed-vs-skipped"
