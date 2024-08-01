@@ -27,6 +27,7 @@ KERNEL_FEATURES:append = " bsp.cfg "
 SRC_URI:append = " file://fpgamgr.cfg  \
        file://iio_axidmac.cfg          \
        file://kerneltracing.cfg        \
+       file://netconsole.cfg        \
        "
 
 
