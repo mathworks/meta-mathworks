@@ -17,20 +17,22 @@ SD_KEYDIR=${_SD_ROOT}/sshkeys
 ETC_KEYDIRS="/etc/ssh /etc/dropbear"
 
 if [ -d $SD_KEYDIR ]; then
-	echo -n "### Restoring SSH keys from the SD card to $d "
-	for d in $ETC_KEYDIRS ; do
-		KEYFOLDER=$SD_KEYDIR/$(basename $d)
-		if [ -f $KEYFOLDER/*host_*key* ]; then
-        		echo -n "### Restoring keys from the SD card to $d "
-        		${UPDATE} -f $KEYFOLDER/*host_*key* $d/
-        		chmod 600 $d/*host_*key*
-		fi
-	        if [ "$_SYS_PERSISTENT_FILESYSTEM" == "true" ]; then
-                	rm -rf $SD_KEYDIR
-        	fi
-	done
-	echo "OK"
+        for d in $ETC_KEYDIRS ; do
+                if [ ! -d ${d} ]; then
+                        continue;
+                fi
+                KEYFOLDER=$SD_KEYDIR/$(basename ${d})
+                echo -n "### Restoring SSH keys from the ${SD_KEYDIR} to ${d}..."
+                sshkeys=$(find ${KEYFOLDER} -type f -name "*host_*key*")
+                for k in ${sshkeys}; do
+                        ${UPDATE} -f ${k} ${d}/
+                        chmod 600 $d/*host_*key*
+                done
+                if [ "$_SYS_PERSISTENT_FILESYSTEM" == "true" ]; then
+                        rm -rf $SD_KEYDIR
+                fi
+        done
+        echo "OK"
 fi
 
 exit 0
-
