@@ -11,18 +11,21 @@ SD_KEYDIR=${_SD_ROOT}/sshkeys
 ETC_KEYDIRS="/etc/ssh /etc/dropbear"
 
 if [ "${_SYS_PERSISTENT_FILESYSTEM}" == "false" ]; then
-	echo -n "### Backing up SSH keys from to the SD card: "
         for d in $ETC_KEYDIRS ; do
-                KEYFOLDER=$SD_KEYDIR/$(basename $d)
+                if [ ! -d ${d} ]; then
+                        continue;
+                fi
+                KEYFOLDER=$SD_KEYDIR/$(basename ${d})
+                echo "### Backup keys from $d to the SD card: ${KEYFOLDER}"
                 if [ ! -d $KEYFOLDER ]; then
                         mkdir -p $KEYFOLDER
                 fi
-                if [ -f $d/*host_*key* ]; then
-                        echo "### Backup keys from $d to the SD card: "
-                        cp $d/*host_*key* $KEYFOLDER
-                fi
+                sshkeys=$(find ${d} -type f -name "*host_*key*")
+                for k in ${sshkeys}; do
+                        cp ${k} $KEYFOLDER
+                done
         done
-	sync
+        sync
         echo "OK"
 fi
 
