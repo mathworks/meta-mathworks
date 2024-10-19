@@ -1,13 +1,13 @@
-IMAGE_INSTALL:append = " boost"
-IMAGE_INSTALL:append = " openssh-sftp-server"
-IMAGE_INSTALL:append = " libubootenv-bin"
-IMAGE_INSTALL:append = " busybox-udhcpd busybox-udhcpc busybox-inetd"
-IMAGE_INSTALL:append = " libiio libiio-iiod libserialport "
-IMAGE_INSTALL:append = " lttng-ust lttng-ust-bin lttng-tools lttng-modules"
-IMAGE_INSTALL:append = " avahi-utils avahi-daemon avahi-autoipd"
-IMAGE_INSTALL:append = " dtc"
-IMAGE_INSTALL:append = " procps"
-IMAGE_INSTALL:append = " libsysfs sysfsutils libmetal libconfig"
+IMAGE_INSTALL_append = " boost"
+IMAGE_INSTALL_append = " openssh-sftp-server"
+IMAGE_INSTALL_append = " libubootenv-bin"
+IMAGE_INSTALL_append = " busybox-udhcpd busybox-udhcpc busybox-inetd"
+IMAGE_INSTALL_append = " libiio libiio-iiod libserialport "
+IMAGE_INSTALL_append = " lttng-ust lttng-ust-bin lttng-tools lttng-modules"
+IMAGE_INSTALL_append = " avahi-utils avahi-daemon avahi-autoipd"
+IMAGE_INSTALL_append = " dtc"
+IMAGE_INSTALL_append = " procps"
+IMAGE_INSTALL_append = " libsysfs sysfsutils libmetal libconfig"
 
 
 inherit extrausers
@@ -34,9 +34,9 @@ l_enable_autologin () {
 		    sed -i -e 's/^\(ExecStart *=.*getty \)/\1--autologin root /' $unit
 		fi
 	done
-	if [ -f ${GETTY_SYSVINIT_UNIT} ]; then
-	    sed -i 's/\/bin\/start_getty\(.*\)/\/sbin\/getty\1 -a root/' ${GETTY_SYSVINIT_UNIT} 
-	fi
+#	if [ -f ${GETTY_SYSVINIT_UNIT} ]; then
+#	    sed -i 's/\/bin\/start_getty\(.*\)/\/sbin\/getty\1 -a root/' ${GETTY_SYSVINIT_UNIT} 
+#	fi
 }
 
 l_permit_sshrootlogin () {
@@ -48,7 +48,7 @@ l_permit_sshrootlogin () {
 	fi
 }
 
-ROOTFS_POSTPROCESS_COMMAND:append = "l_enable_autologin; \
+ROOTFS_POSTPROCESS_COMMAND_append = "l_enable_autologin; \
 				     l_permit_sshrootlogin;"
 
 

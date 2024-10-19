@@ -41,10 +41,10 @@ PACKAGECONFIG[TESTS] = "-DWITH_TESTS=ON,-DWITH_TESTS=OFF,libxml2"
 
 PACKAGES =+ "${PN}-iiod ${PN}-tests ${PN}-python"
 
-RDEPENDS:${PN}-python = "${PN} python3-ctypes python3-stringold"
+RDEPENDS_${PN}-python = "${PN} python3-ctypes python3-stringold"
 
-#FILES:${PN}-tests = "${bindir}"
-FILES:${PN}-python = "${PYTHON_SITEPACKAGES_DIR}"
+#FILES_${PN}-tests = "${bindir}"
+FILES_${PN}-python = "${PYTHON_SITEPACKAGES_DIR}"
 
 SYSTEMD_PACKAGES = "${PN}-iiod"
-SYSTEMD_SERVICE:${PN}-iiod = "iiod.service"
+SYSTEMD_SERVICE_${PN}-iiod = "iiod.service"

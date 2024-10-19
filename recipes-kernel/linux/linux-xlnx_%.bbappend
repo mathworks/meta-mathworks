@@ -1,25 +1,23 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
-DESCRIPTION = "MW kernel"
-LINUX_VERSION = "5.15"
-MW_VERSION = "master"
-PV = "${LINUX_VERSION}-${MW_VERSION}+git${SRCPV}"
-KBRANCH = "mw-5.15.0"
+DESCRIPTION = "ADI kernel"
+LINUX_VERSION = "5.10"
+ADI_VERSION = "adi_2021_R2"
 
-SRCREV = "${@ "79f0591f4c8d7b8d202cf8d53758ae26f0ee662d" if bb.utils.to_boolean(d.getVar('BB_NO_NETWORK')) else d.getVar('AUTOREV')}"
-KERNELURI = "git://github.com/mathworks/xilinx-linux.git;protocol=https"
+PV = "${LINUX_VERSION}-${ADI_VERSION}+git${SRCPV}"
+KBRANCH = "2021_R2"
+# needed for offline build
+SRCREV = "${@ "e966bb2dd74fa12c989e5b9485fe63cca5c9bfee" if bb.utils.to_boolean(d.getVar('BB_NO_NETWORK')) else d.getVar('AUTOREV')}"
+KERNELURI = "git://github.com/analogdevicesinc/linux.git;protocol=https"
 
 # override kernel config file
-KBUILD_DEFCONFIG:versal = "xilinx_versal_defconfig"
-KBUILD_DEFCONFIG:zynmp = "mw_zynqmp_defconfig"
-KBUILD_DEFCONFIG:zynq = "mw_zynq_defconfig"
+KBUILD_DEFCONFIG_zynq = "zynq_xcomm_adv7511_defconfig"
+KBUILD_DEFCONFIG_zynqmp = "adi_zynqmp_defconfig"
+KBUILD_DEFCONFIG_microblaze = "adi_mb_defconfig"
 
-SRC_URI:append = " file://bsp.cfg"
-KERNEL_FEATURES:append = " bsp.cfg"
+SRC_URI_append = " file://bsp.cfg"
+KERNEL_FEATURES_append = " bsp.cfg"
 
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-SRC_URI:append += " file://bsp.cfg"
-KERNEL_FEATURES:append += " bsp.cfg"
 SRC_URI += "file://user_2022-05-23-16-27-00.cfg \
             file://user_2022-06-15-16-56-00.cfg \
             file://user_2022-07-05-15-54-00.cfg \

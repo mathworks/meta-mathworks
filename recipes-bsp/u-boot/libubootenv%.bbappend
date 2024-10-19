@@ -1,9 +1,9 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/etc:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files/etc:"
 
 
-SRC_URI:append = " file://fw_env.config"
+SRC_URI_append = " file://fw_env.config"
 
-do_install:append() {
+do_install_append() {
 	install -d ${D}${sysconfdir}
 	UBOOT_CONFIG=${BASE_WORKDIR}/${MACHINE_ARCH}${HOST_VENDOR}-${TARGET_OS}/u-boot-xlnx/*/build/.config
 	if [ -f $UBOOT_CONFIG ]; then

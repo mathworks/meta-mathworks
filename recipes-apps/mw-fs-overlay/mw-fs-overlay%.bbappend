@@ -1,8 +1,8 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/common/fs-overlay/usr:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files/common/fs-overlay/usr:"
 #Append symbolic links
 SRC_URI += " file://sbin/"
 
-do_install:append() {
+do_install_append() {
 	install -d ${D}${bindir}
 	cd ${D}${bindir}
 	ln -s ../sbin/fw_getbitstream fw_getbitstream 

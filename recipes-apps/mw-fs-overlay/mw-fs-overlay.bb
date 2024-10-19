@@ -5,13 +5,13 @@ DESCRIPTION = "Add MW startup files and other utilities"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-RDEPENDS:${PN} += "libubootenv"
+RDEPENDS_${PN} += "libubootenv"
 
 inherit systemd features_check
 
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
-FILESEXTRAPATHS:prepend := "${THISDIR}/common:"
-FILESEXTRAPATHS:prepend := "${THISDIR}/services:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/common:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/services:"
 
 SRC_URI = " file://common file://zynqmp \
 	file://services/hostname.service \
@@ -31,14 +31,7 @@ SRC_URI = " file://common file://zynqmp \
 	"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-DEPENDS:append = " update-rc.d-native"
-
-SYSTEMD_SERVICE:${PN} = "sdcard_mount.service usb_network.service \
-			sdinit.service network.service \
-			network_scripts.service udhcpd.service \
-			inetd.service user_app.service \
-			nfs-common.service hostname.service \
-			backupSSHKeys.service restoreSSHKeys.service"
+DEPENDS_append = " update-rc.d-native"
 
 do_install() {
 	chmod -R 0755 ${WORKDIR}/common/fs-overlay/usr/sbin/
@@ -55,6 +48,13 @@ do_install() {
 
 	if [ "${@bb.utils.contains('INIT_MANAGER','systemd','yes','no',d)}" = "yes" ]; then
 		echo "Installing MW systemd services..."
+		SYSTEMD_SERVICE_${PN} = "sdcard_mount.service usb_network.service \
+			sdinit.service network.service \
+			network_scripts.service udhcpd.service \
+			inetd.service user_app.service \
+			nfs-common.service hostname.service \
+			backupSSHKeys.service restoreSSHKeys.service"
+
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
@@ -103,9 +103,9 @@ do_install() {
 	cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}/${sysconfdir}/udev/rules.d/
 }
 
-FILES:${PN} += "${sysconfdir}/*"
-FILES:${PN} += "${sbindir}/"
-FILES:${PN} += "${systemd_system_unitdir}/"
+FILES_${PN} += "${sysconfdir}/*"
+FILES_${PN} += "${sbindir}/"
+FILES_${PN} += "${systemd_system_unitdir}/"
 SYSTEMD_AUTO_ENABLE = "enable"
-INSANE_SKIP:${PN} += "installed-vs-shipped"
+INSANE_SKIP_${PN} += "installed-vs-shipped"
 REQUIRED_DISTRO_FEATURES = "systemd"

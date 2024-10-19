@@ -1,5 +1,5 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
-SRC_URI:append = " file://boot.cmd.mw.initrd"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+SRC_URI_append = " file://boot.cmd.mw.initrd"
 
 BOOTMODE = "mw"
 BOOTFILE_EXT = ".initrd"

@@ -2,7 +2,7 @@
 DESCRIPTION = "Generate device-tree blobs for use with MathWorks example reference designs"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/files/:"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 # Depend on the virtual/kernel for kernel source and cmake-native for CMake
@@ -40,6 +40,6 @@ do_deploy() {
 	install -Dm 0644 ${B}/*.dtb ${D}/boot/mwdtbs/
 }
 
-FILES:${PN} += "/boot/mwdtbs/*.dtb"
-INSANE_SKIP:${PN} += "installed-vs-skipped"
+FILES_${PN} += "/boot/mwdtbs/*.dtb"
+INSANE_SKIP_${PN} += "installed-vs-skipped"
 
