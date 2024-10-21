@@ -23,4 +23,6 @@ SRC_URI += "file://user_2022-05-23-16-27-00.cfg \
             file://user_2022-07-05-15-54-00.cfg \
             file://user_2022-07-05-16-34-00.cfg \
             file://user_2022-08-25-16-58-00.cfg \
+            file://0001-drivers-misc-mathworks-Add-support-for-sharedmem-cha.patch \
+            file://0002-drivers-dma-Remove-partial-transfers-for-ADI-DMAC.patch \
             "
