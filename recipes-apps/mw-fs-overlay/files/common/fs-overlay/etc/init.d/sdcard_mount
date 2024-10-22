@@ -5,7 +5,13 @@
 
 _SD_ROOT=/dev/mmcblk0p1
 
-source /etc/init.d/start_only.sh
+if [ -f /etc/init.d/start_only.sh ]
+then
+	source /etc/init.d/start_only.sh
+else
+	source /usr/sbin/start_only.sh
+fi 
+
 
 mounted=$(mount | grep "${_SD_ROOT}")
 if [ "$mounted" == "" ] && [ "${_SD_ROOT}" != "" ] ; then

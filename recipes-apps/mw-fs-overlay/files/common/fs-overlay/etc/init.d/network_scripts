@@ -5,7 +5,12 @@
 
 source /etc/bootvars.conf
 
-source /etc/init.d/start_only.sh
+if [ -f /etc/init.d/start_only.sh ]
+then
+	source /etc/init.d/start_only.sh
+else
+	source /usr/sbin/start_only.sh
+fi 
 
 if [ "$_SYS_PERSISTENT_FILESYSTEM" == "true" ]; then
     UPDATE=mv
@@ -23,7 +28,17 @@ for i in $(seq 1 $_NETWORK_FILES_NELEM); do
     	echo "+++ Configuring $dst"
 	    $UPDATE -f $src $dst
 	elif  [ "$WARN_NOTFOUND" == "true" ] && [ "$warn" == "true" ]; then
-    	echo "### $src file not found in the SD card. Using default settings in $dst..."
+    		echo "### $src file not found in the SD card. Using default settings in $dst..."
+	fi
+done
+
+RUN_PARTS_DIRS="/etc/network/if-up.d /etc/network/if-down.d"
+
+for networkpartdir in ${RUN_PARTS_DIRS}
+do
+	if [ ! -d ${networkpartdir} ]
+	then
+		mkdir -p ${networkpartdir}
 	fi
 done
 

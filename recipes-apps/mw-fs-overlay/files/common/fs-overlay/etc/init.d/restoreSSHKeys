@@ -5,7 +5,12 @@
 
 source /etc/bootvars.conf
 
-source /etc/init.d/start_only.sh
+if [ -f /etc/init.d/start_only.sh ]
+then
+	source /etc/init.d/start_only.sh
+else
+	source /usr/sbin/start_only.sh
+fi 
 
 if [ "$_SYS_PERSISTENT_FILESYSTEM" == "true" ]; then
     UPDATE=mv
