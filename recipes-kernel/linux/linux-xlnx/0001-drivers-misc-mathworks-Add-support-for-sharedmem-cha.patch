@@ -1,9 +1,12 @@
-From 2b6c73b8a566a58c114cbdbce08c63776d13e75e Mon Sep 17 00:00:00 2001
+From 353f717498fa64369d27c9eef6376a4a3221d5db Mon Sep 17 00:00:00 2001
 From: mw-agadkari <agadkari@mathworks.com>
 Date: Sun, 20 Oct 2024 06:59:35 -0400
-Subject: [PATCH] drivers/misc/mathworks: Add support for sharedmem channel
+Subject: [PATCH 1/2] drivers/misc/mathworks: Add support for sharedmem channel
 
 ---
+ arch/arm64/configs/adi_zynqmp_defconfig       |    2 +
+ drivers/misc/mathworks/Kconfig                |   28 +
+ drivers/misc/mathworks/Makefile               |    4 +
  drivers/misc/mathworks/mathworks_ip_common.c  |   69 +-
  drivers/misc/mathworks/mathworks_ip_common.h  |    0
  drivers/misc/mathworks/mathworks_ipcore.c     |   58 +-
@@ -13,13 +16,82 @@ Subject: [PATCH] drivers/misc/mathworks: Add support for sharedmem channel
  .../misc/mathworks/mw_sharedmem_iio_channel.c | 1090 +++++++++++++++++
  .../misc/mathworks/mw_sharedmem_iio_channel.h |   25 +
  include/linux/mathworks/mathworks_ip.h        |   52 +-
- 9 files changed, 1603 insertions(+), 68 deletions(-)
+ 12 files changed, 1637 insertions(+), 68 deletions(-)
  create mode 100644 drivers/misc/mathworks/mathworks_ip_common.h
  create mode 100644 drivers/misc/mathworks/mw_mm_iio_channel.c
  create mode 100644 drivers/misc/mathworks/mw_mm_iio_channel.h
  create mode 100644 drivers/misc/mathworks/mw_sharedmem_iio_channel.c
  create mode 100644 drivers/misc/mathworks/mw_sharedmem_iio_channel.h
 
+diff --git a/arch/arm64/configs/adi_zynqmp_defconfig b/arch/arm64/configs/adi_zynqmp_defconfig
+index 1a519fe74105..0918d39d80d6 100644
+--- a/arch/arm64/configs/adi_zynqmp_defconfig
++++ b/arch/arm64/configs/adi_zynqmp_defconfig
+@@ -149,6 +149,8 @@ CONFIG_MATHWORKS_IP_CORE=y
+ CONFIG_MWIPCORE=y
+ CONFIG_MWIPCORE_DMA_STREAMING=y
+ CONFIG_MWIPCORE_IIO_STREAMING=y
++CONFIG_MWIPCORE_IIO_MM=y
++CONFIG_MWIPCORE_IIO_SHAREDMEM=y
+ CONFIG_MATHWORKS_GENERIC_OF=y
+ # CONFIG_MATHWORKS_GENERIC_PCI is not set
+ CONFIG_BLK_DEV_SD=y
+diff --git a/drivers/misc/mathworks/Kconfig b/drivers/misc/mathworks/Kconfig
+index 5a41345097c4..9968c7ba2868 100644
+--- a/drivers/misc/mathworks/Kconfig
++++ b/drivers/misc/mathworks/Kconfig
+@@ -62,6 +62,34 @@ config MWIPCORE_IIO_STREAMING
+ 		To compile this driver as a module, choose M here:
+ 		the module will be called mwipcore_iio_streaming
+ 
++config MWIPCORE_IIO_MM
++	tristate "MathWorks IIO Memory Mapped Driver"
++	depends on DMADEVICES
++	depends on IIO
++	select IIO_BUFFER
++	select IIO_BUFFER_DMAENGINE
++	default m
++	help
++		Enable support for MathWorks IIO-based implementation of
++		memory mapped IO and DMA
++
++		To compile this driver as a module, choose M here:
++		the module will be called mwipcore_iio_mm
++		
++config MWIPCORE_IIO_SHAREDMEM
++	tristate "MathWorks IIO Shared Memory Driver"
++	depends on DMADEVICES
++	depends on IIO
++	select IIO_BUFFER
++	select IIO_BUFFER_DMAENGINE
++	default m
++	help
++		Enable support for MathWorks IIO-based implementation of
++		shared, random-access memory region
++
++		To compile this driver as a module, choose M here:
++		the module will be called mwipcore_iio_sharedregion
++
+ endif #if MWIPCORE
+ 
+ config MATHWORKS_GENERIC_OF
+diff --git a/drivers/misc/mathworks/Makefile b/drivers/misc/mathworks/Makefile
+index f8982784f085..8f42b2bd58ef 100644
+--- a/drivers/misc/mathworks/Makefile
++++ b/drivers/misc/mathworks/Makefile
+@@ -9,8 +9,12 @@ obj-$(CONFIG_MATHWORKS_GENERIC_PCI) += mathworks_generic_pci.o
+ obj-$(CONFIG_MWIPCORE) += mwipcore.o
+ obj-$(CONFIG_MWIPCORE_DMA_STREAMING) += mwipcore_dma_streaming.o
+ obj-$(CONFIG_MWIPCORE_IIO_STREAMING) += mwipcore_iio_streaming.o
++obj-$(CONFIG_MWIPCORE_IIO_MM) += mwipcore_iio_mm.o
++obj-$(CONFIG_MWIPCORE_IIO_SHAREDMEM) += mwipcore_iio_sharedmem.o
+ 
+ mwipcore_dma_streaming-objs := mw_stream_channel.o
+ mwipcore_iio_streaming-objs := mw_stream_iio_channel.o
++mwipcore_iio_mm-objs := mw_mm_iio_channel.o
++mwipcore_iio_sharedmem-objs := mw_sharedmem_iio_channel.o
+ mwipcore-objs := mathworks_ipcore.o
+ 
 diff --git a/drivers/misc/mathworks/mathworks_ip_common.c b/drivers/misc/mathworks/mathworks_ip_common.c
 index 9352a5c695d1..6eb9fc4bd2f2 100644
 --- a/drivers/misc/mathworks/mathworks_ip_common.c
