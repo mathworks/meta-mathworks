@@ -33,18 +33,20 @@ SRC_URI = " file://common file://zynqmp \
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 DEPENDS:append = " update-rc.d-native"
 
-SYSTEMD_SERVICE:${PN} = "sdcard_mount.service usb_network.service \
-			sdinit.service network.service \
-			network_scripts.service udhcpd.service \
-			inetd.service user_app.service \
-			nfs-common.service hostname.service \
-			backupSSHKeys.service restoreSSHKeys.service"
+SERVICEUNITS = "sdcard_mount.service usb_network.service \
+ sdinit.service network.service network_scripts.service udhcpd.service \
+ inetd.service user_app.service nfs-common.service hostname.service \
+ backupSSHKeys.service restoreSSHKeys.service "
+
+SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('INIT_MANAGER','systemd','${SERVICEUNITS}','" "',d)}"
 
 do_install() {
 	chmod -R 0755 ${WORKDIR}/common/fs-overlay/usr/sbin/
 	chmod -R 0755 ${WORKDIR}/zynqmp/fs-overlay/etc/profile.d/
 	install -d ${D}${sysconfdir}/
 	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/udhcpd.conf
+
+	cp -r ${WORKDIR}/${PLATFORM}/fs-overlay/etc ${D}${sysconfdir}/
 
 	install -d ${D}${sysconfdir}/bootvars.d/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.conf ${D}${sysconfdir}/
@@ -54,7 +56,9 @@ do_install() {
 	install -d ${D}${sysconfdir}/init.d
 
 	if [ "${@bb.utils.contains('INIT_MANAGER','systemd','yes','no',d)}" = "yes" ]; then
-		echo "Installing MW systemd services..."
+		echo "### Update scripts in ${WORKDIR}/fs-overlay/etc/init.d/ to refer to ${sbindir} instead of ${sysconfdir}/init.d"
+		find ${WORKDIR}/common/fs-overlay/etc/init.d/ -type f -not -name "hostname" -exec sed -i 's/\/etc\/init.d/\/usr\/sbin/gp' {} \;
+		echo "### Installing MW systemd services to ${D}${sbindir}..."
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
