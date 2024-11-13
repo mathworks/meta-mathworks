@@ -28,6 +28,8 @@ SRC_URI:append = " file://fpgamgr.cfg  \
        file://iio_axidmac.cfg          \
        file://kerneltracing.cfg        \
        file://netconsole.cfg        \
+       file://usb_gadget.cfg        \
+       file://0001-drivers-dma-Remove-partial-transfers-for-ADI-DMAC.patch \
        "
 
 
