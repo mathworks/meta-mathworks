@@ -7,7 +7,7 @@
 source /etc/init.d/start_only.sh
 
 # Update the hostname after copying/moving files from the SD card
-/bin/hostname -F /etc/hostname
+/bin/hostname $(cat /etc/hostname)
 # Restart avahi-daemon if it exists to update the hostname
 if [ -f /etc/init.d/avahi-daemon ];
 then
