@@ -24,6 +24,7 @@ SRC_URI = " file://common file://zynqmp \
 	file://services/start_only.service \
 	file://services/udhcpd.service \
 	file://services/usb_network.service \
+	file://services/udc.service \
 	file://services/user_app.service \
 	file://services/user_init.service \
 	file://services/backupSSHKeys.service \
@@ -36,7 +37,7 @@ DEPENDS:append = " update-rc.d-native"
 SERVICEUNITS = "sdcard_mount.service usb_network.service \
  sdinit.service network.service network_scripts.service udhcpd.service \
  inetd.service user_app.service nfs-common.service hostname.service \
- backupSSHKeys.service restoreSSHKeys.service "
+ backupSSHKeys.service restoreSSHKeys.service udc.service "
 
 SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('INIT_MANAGER','systemd','${SERVICEUNITS}','" "',d)}"
 
@@ -45,8 +46,6 @@ do_install() {
 	chmod -R 0755 ${WORKDIR}/zynqmp/fs-overlay/etc/profile.d/
 	install -d ${D}${sysconfdir}/
 	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/udhcpd.conf
-
-	cp -r ${WORKDIR}/${PLATFORM}/fs-overlay/etc ${D}${sysconfdir}/
 
 	install -d ${D}${sysconfdir}/bootvars.d/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.conf ${D}${sysconfdir}/
@@ -66,6 +65,7 @@ do_install() {
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network_scripts  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdcard_mount  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdinit  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/udc_setup ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/usb_network ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_app ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_init ${D}${sbindir}/
@@ -86,6 +86,7 @@ do_install() {
 		install -d ${D}${sysconfdir}/rc5.d
 		update-rc.d -r ${D} sdcard_mount start 8 1 2 3 4 5 .
 		update-rc.d -r ${D} restoreSSHKeys start 9 1 2 3 4 5 .
+		update-rc.d -r ${D} udc_setup start 23 1 2 3 4 5 .
 		update-rc.d -r ${D} network_scripts start 38 1 2 3 4 5 .
 		update-rc.d -r ${D} hostname start 39 1 2 3 4 5 .
 		update-rc.d -r ${D} usb_network start 39 1 2 3 4 5 .
