@@ -5,7 +5,7 @@ DESCRIPTION = "Add MW startup files and other utilities"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-RDEPENDS:${PN} += "libubootenv"
+RDEPENDS:${PN} += " libubootenv"
 
 inherit systemd features_check
 
@@ -46,7 +46,6 @@ do_install() {
 	chmod -R 0755 ${WORKDIR}/zynqmp/fs-overlay/etc/profile.d/
 	install -d ${D}${sysconfdir}/
 	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/udhcpd.conf
-
 	install -d ${D}${sysconfdir}/bootvars.d/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.conf ${D}${sysconfdir}/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
@@ -61,6 +60,7 @@ do_install() {
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/udhcpd ${D}${sbindir}/start_udhcpd
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network_scripts  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdcard_mount  ${D}${sbindir}/
@@ -92,6 +92,7 @@ do_install() {
 		update-rc.d -r ${D} usb_network start 39 1 2 3 4 5 .
 		update-rc.d -r ${D} network start 40 1 2 3 4 5 .
 		update-rc.d -r ${D} inetd start 41 1 2 3 4 5 .
+		update-rc.d -r ${D} udhcpd start 42 1 2 3 4 5 .
 		update-rc.d -r ${D} backupSSHKeys start 51 1 2 3 4 5 .
 		update-rc.d -r ${D} user_init start 97 1 2 3 4 5 .
 		update-rc.d -r ${D} user_app start 98 1 2 3 4 5 .
@@ -109,5 +110,5 @@ FILES:${PN} += "${sysconfdir}/*"
 FILES:${PN} += "${sbindir}/"
 FILES:${PN} += "${systemd_system_unitdir}/"
 SYSTEMD_AUTO_ENABLE = "enable"
-INSANE_SKIP:${PN} += "installed-vs-shipped"
+INSANE_SKIP:${PN} += " installed-vs-shipped"
 REQUIRED_DISTRO_FEATURES = "systemd"

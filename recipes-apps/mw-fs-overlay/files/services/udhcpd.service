@@ -2,7 +2,8 @@
 
 [Unit]
 Documentation=man:systemd-sysv-generator(8)
-SourcePath=/usr/sbin/udhcpd
+SourcePath=/usr/sbin/start_udhcpd
+After=network.service
 
 [Service]
 Type=forking
@@ -12,8 +13,8 @@ IgnoreSIGPIPE=no
 KillMode=process
 GuessMainPID=no
 RemainAfterExit=yes
-ExecStart=/usr/sbin/udhcpd start
-ExecStop=/usr/sbin/udhcpd stop
+ExecStart=start_udhcpd start
+ExecStop=start_udhcpd stop
 StandardOutput=journal+console
 
 [Install]
