@@ -16,7 +16,7 @@ Open a Linux terminal and run following commands:
 
 ```bash
 source <path-to-petalinux-installation-root>/settings.sh
-git clone https://insidelabs-git.mathworks.com/EmbeddedLinux/meta-mathworks -b petalinux-2022.1
+git clone https://github.com/mathworks/meta-mathworks -b petalinux-2022.1
 petalinux-create -t project --template <PLATFORM> --name <PROJECT_NAME>
   Here <PLATFORM> can be any one of:
     * zynqMP (for Xilinx Zynq UltraScale+ MPSoC platform)
