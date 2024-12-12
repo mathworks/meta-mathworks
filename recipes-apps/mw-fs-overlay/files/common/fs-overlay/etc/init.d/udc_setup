@@ -51,7 +51,6 @@ case "$1" in
 	
 	mkdir -p $GADGET/configs/c1.1
 	ln -s $GADGET/functions/rndis.rn0 $GADGET/configs/c1.1
-	sleep 1;
 	echo "${UDCNAME}" > $GADGET/UDC
 	ip link set dev usb0 mtu 15300
 	[ $? = 0 ] && echo "OK" || echo "FAIL"
