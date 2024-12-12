@@ -1,0 +1,64 @@
+From d800b5a043279857ff305f8e5c0821e7c077440a Mon Sep 17 00:00:00 2001
+From: mw-agadkari <agadkari@mathworks.com>
+Date: Thu, 12 Dec 2024 06:55:14 -0500
+Subject: [PATCH 1/1] drivers/misc/mathworks: Update get_irq API and reset
+ TLAST at pre-enable instead of resetting full ip-core
+
+---
+ drivers/misc/mathworks/mathworks_ip_common.c   |  2 +-
+ drivers/misc/mathworks/mw_stream_iio_channel.c | 13 ++++---------
+ 2 files changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/misc/mathworks/mathworks_ip_common.c b/drivers/misc/mathworks/mathworks_ip_common.c
+index dfb7b1387780..cb52a7da34fc 100644
+--- a/drivers/misc/mathworks/mathworks_ip_common.c
++++ b/drivers/misc/mathworks/mathworks_ip_common.c
+@@ -445,7 +445,7 @@ struct mathworks_ip_info *devm_mathworks_ip_of_init(
+ 	ipDev->dev = &pdev->dev;
+ 	ipDev->name = pdev->dev.of_node->name;
+ 	/* Check for IRQ first, we may have to defer */
+-	ipDev->irq = platform_get_irq(pdev, 0);
++	ipDev->irq = platform_get_irq_optional(pdev, 0);
+ 	if (ipDev->irq < 0) {
+ 		switch (ipDev->irq){
+ 			case -EPROBE_DEFER:
+diff --git a/drivers/misc/mathworks/mw_stream_iio_channel.c b/drivers/misc/mathworks/mw_stream_iio_channel.c
+index cfc01bdcf2e2..c4c30d07b3f7 100644
+--- a/drivers/misc/mathworks/mw_stream_iio_channel.c
++++ b/drivers/misc/mathworks/mw_stream_iio_channel.c
+@@ -79,28 +79,23 @@ static int mw_stream_iio_buffer_preenable(struct iio_dev *indio_dev)
+ {
+ 	struct mw_stream_iio_chandev *mwchan = iio_priv(indio_dev);
+ 
+-	dev_dbg(&mwchan->dev, "buffer preenable\n");
+-
++	dev_dbg(&mwchan->dev, "Buffer preenable\n");
+ 	switch(mwchan->reset_ip_mode) {
+ 		case MW_STREAM_RESET_IP_MODE_ENABLE:
+ 		case MW_STREAM_RESET_IP_MODE_ALL:
+-			/* reset the ip core */
+-			dev_dbg(&mwchan->dev, "resetting IP Core\n");
++			dev_dbg(&mwchan->dev, "Resetting IP Core\n");
+ 			mw_ip_reset(mwchan->mwdev);
+ 			break;
+ 		default:
+-			/* Do Nothing */
+ 			break;
+ 	}
+ 	if (mwchan->tlast_cntr_addr >= 0 && mwchan->tlast_mode == MW_STREAM_TLAST_MODE_AUTO) {
+ 		if(mwchan->reset_tlast_mode == MW_STREAM_TLAST_MODE_PREBUFFER) {
+-			/* reset the IP core (TODO: only reset the TLAST register)*/
+-			mw_ip_reset(mwchan->mwdev);
++			dev_dbg(&mwchan->dev, "Resetting TLAST register \n");
++			mw_ip_write32(mwchan->mwdev->mw_ip_info, mwchan->tlast_cntr_addr, 0x0);
+ 		}
+-		/* Set the TLAST count */
+ 		mw_ip_write32(mwchan->mwdev->mw_ip_info, mwchan->tlast_cntr_addr, indio_dev->buffer->length);
+ 	}
+-
+ 	return 0;
+ }
+ static int mw_stream_iio_buffer_postenable(struct iio_dev *indio_dev)
+-- 
+2.25.1
+
