@@ -5,13 +5,13 @@ DESCRIPTION = "Add MW startup files and other utilities"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-RDEPENDS_${PN} += "libubootenv"
+RDEPENDS:${PN} += " libubootenv"
 
 inherit systemd features_check
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-FILESEXTRAPATHS_prepend := "${THISDIR}/common:"
-FILESEXTRAPATHS_prepend := "${THISDIR}/services:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/common:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/services:"
 
 SRC_URI = " file://common file://zynqmp \
 	file://services/hostname.service \
@@ -24,6 +24,7 @@ SRC_URI = " file://common file://zynqmp \
 	file://services/start_only.service \
 	file://services/udhcpd.service \
 	file://services/usb_network.service \
+	file://services/udc.service \
 	file://services/user_app.service \
 	file://services/user_init.service \
 	file://services/backupSSHKeys.service \
@@ -31,21 +32,20 @@ SRC_URI = " file://common file://zynqmp \
 	"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-DEPENDS_append = " update-rc.d-native"
-SYSTEMD_SERVICE_${PN} = "sdcard_mount.service usb_network.service \
- sdinit.service network.service \
- network_scripts.service udhcpd.service \
- inetd.service user_app.service \
- nfs-common.service hostname.service \
- backupSSHKeys.service restoreSSHKeys.service"
+DEPENDS:append = " update-rc.d-native"
 
+SERVICEUNITS = "sdcard_mount.service usb_network.service \
+ sdinit.service network.service network_scripts.service udhcpd.service \
+ inetd.service user_app.service nfs-common.service hostname.service \
+ backupSSHKeys.service restoreSSHKeys.service udc.service "
+
+SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('INIT_MANAGER','systemd','${SERVICEUNITS}','" "',d)}"
 
 do_install() {
 	chmod -R 0755 ${WORKDIR}/common/fs-overlay/usr/sbin/
 	chmod -R 0755 ${WORKDIR}/zynqmp/fs-overlay/etc/profile.d/
 	install -d ${D}${sysconfdir}/
 	install -m 0644 ${WORKDIR}/common/fs-overlay/etc/udhcpd.conf ${D}${sysconfdir}/udhcpd.conf
-
 	install -d ${D}${sysconfdir}/bootvars.d/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.conf ${D}${sysconfdir}/
 	cp -r ${WORKDIR}/common/fs-overlay/etc/bootvars.d/* ${D}${sysconfdir}/bootvars.d/
@@ -54,14 +54,18 @@ do_install() {
 	install -d ${D}${sysconfdir}/init.d
 
 	if [ "${@bb.utils.contains('INIT_MANAGER','systemd','yes','no',d)}" = "yes" ]; then
-		echo "Installing MW systemd services..."
+		echo "### Update scripts in ${WORKDIR}/fs-overlay/etc/init.d/ to refer to ${sbindir} instead of ${sysconfdir}/init.d"
+		find ${WORKDIR}/common/fs-overlay/etc/init.d/ -type f -not -name "hostname" -exec sed -i 's/\/etc\/init.d/\/usr\/sbin/gp' {} \;
+		echo "### Installing MW systemd services to ${D}${sbindir}..."
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/udhcpd ${D}${sbindir}/start_udhcpd
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network_scripts  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdcard_mount  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdinit  ${D}${sbindir}/
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/udc_setup ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/usb_network ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_app ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/user_init ${D}${sbindir}/
@@ -82,20 +86,18 @@ do_install() {
 		install -d ${D}${sysconfdir}/rc5.d
 		update-rc.d -r ${D} sdcard_mount start 8 1 2 3 4 5 .
 		update-rc.d -r ${D} restoreSSHKeys start 9 1 2 3 4 5 .
+		update-rc.d -r ${D} udc_setup start 23 1 2 3 4 5 .
 		update-rc.d -r ${D} network_scripts start 38 1 2 3 4 5 .
 		update-rc.d -r ${D} hostname start 39 1 2 3 4 5 .
 		update-rc.d -r ${D} usb_network start 39 1 2 3 4 5 .
 		update-rc.d -r ${D} network start 40 1 2 3 4 5 .
 		update-rc.d -r ${D} inetd start 41 1 2 3 4 5 .
+		update-rc.d -r ${D} udhcpd start 42 1 2 3 4 5 .
 		update-rc.d -r ${D} backupSSHKeys start 51 1 2 3 4 5 .
 		update-rc.d -r ${D} user_init start 97 1 2 3 4 5 .
 		update-rc.d -r ${D} user_app start 98 1 2 3 4 5 .
 		update-rc.d -r ${D} sdinit start 99 1 2 3 4 5 .
-	        update-rc.d -r ${D} start_iiod start 99 1 2 3 4 5 .
 	fi
-
-	install -d ${D}/${sysconfdir}/ssh/
-	cp -r ${WORKDIR}/common/fs-overlay/etc/ssh/* ${D}/${sysconfdir}/ssh/
 
 	cp -r ${WORKDIR}/common/fs-overlay/usr/sbin/* ${D}/${sbindir}/
 	chmod -R 0755 ${D}${sbindir}/
@@ -104,9 +106,9 @@ do_install() {
 	cp -r ${WORKDIR}/common/fs-overlay/etc/udev/rules.d/*  ${D}/${sysconfdir}/udev/rules.d/
 }
 
-FILES_${PN} += "${sysconfdir}/*"
-FILES_${PN} += "${sbindir}/"
-FILES_${PN} += "${systemd_system_unitdir}/"
+FILES:${PN} += "${sysconfdir}/*"
+FILES:${PN} += "${sbindir}/"
+FILES:${PN} += "${systemd_system_unitdir}/"
 SYSTEMD_AUTO_ENABLE = "enable"
-INSANE_SKIP_${PN} += "installed-vs-shipped"
+INSANE_SKIP:${PN} += " installed-vs-shipped"
 REQUIRED_DISTRO_FEATURES = "systemd"
