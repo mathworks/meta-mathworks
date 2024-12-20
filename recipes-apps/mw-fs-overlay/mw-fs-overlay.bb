@@ -55,7 +55,7 @@ do_install() {
 
 	if [ "${@bb.utils.contains('INIT_MANAGER','systemd','yes','no',d)}" = "yes" ]; then
 		echo "### Update scripts in ${WORKDIR}/fs-overlay/etc/init.d/ to refer to ${sbindir} instead of ${sysconfdir}/init.d"
-		find ${WORKDIR}/common/fs-overlay/etc/init.d/ -type f -not -name "hostname" -exec sed -i 's/\/etc\/init.d/\/usr\/sbin/gp' {} \;
+		find ${WORKDIR}/common/fs-overlay/etc/init.d/ -type f -not -name "hostname" -exec sed -i 's/\/etc\/init.d/\/usr\/sbin/g' {} \;
 		echo "### Installing MW systemd services to ${D}${sbindir}..."
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
