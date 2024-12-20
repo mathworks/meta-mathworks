@@ -37,11 +37,17 @@ case "$1" in
   start)
  	echo "Starting USB Ethernet..."
 	create_system_files()
-	modprobe -a g_ether
+	if [ -f ${USB_CONF} ];
+	then
+		modprobe -a g_ether
+	fi
 	;;
   stop)
 	echo "Stopping USB Ethernet..."
-	modprobe -r g_ether 2>/dev/null
+	if [ -f ${USB_CONF} ];
+	then
+		modprobe -r g_ether 2>/dev/null
+	fi
 	;;
   restart|reload)
 	"$0" stop
