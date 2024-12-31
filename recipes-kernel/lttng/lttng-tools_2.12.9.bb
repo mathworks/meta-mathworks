@@ -13,6 +13,7 @@ include lttng-platforms.inc
 
 DEPENDS = "liburcu popt libxml2 util-linux"
 RDEPENDS_${PN} = "libgcc"
+LTTNGMODULES = "lttng-modules"
 RRECOMMENDS_${PN} += "${LTTNGMODULES}"
 RDEPENDS_${PN}-ptest += "make perl bash gawk babeltrace procps perl-module-overloading coreutils util-linux kmod ${LTTNGMODULES} sed python3-core"
 RDEPENDS_${PN}-ptest_append_libc-glibc = " glibc-utils"
@@ -24,6 +25,7 @@ PYTHON_OPTION = "am_cv_python_pyexecdir='${PYTHON_SITEPACKAGES_DIR}' \
                  am_cv_python_pythondir='${PYTHON_SITEPACKAGES_DIR}' \
                  PYTHON_INCLUDE='-I${STAGING_INCDIR}/python${PYTHON_BASEVERSION}${PYTHON_ABI}' \
 "
+LTTNGUST = "lttng-ust"
 PACKAGECONFIG ??= "${LTTNGUST}"
 PACKAGECONFIG[python] = "--enable-python-bindings ${PYTHON_OPTION},,python3 swig-native"
 PACKAGECONFIG[lttng-ust] = "--with-lttng-ust, --without-lttng-ust, lttng-ust"
@@ -33,6 +35,7 @@ PACKAGECONFIG[manpages] = "--enable-man-pages, --disable-man-pages, asciidoc-nat
 SRC_URI = "https://lttng.org/files/lttng-tools/lttng-tools-${PV}.tar.bz2 \
            file://0001-tests-do-not-strip-a-helper-library.patch \
            file://run-ptest \
+           file://lttng-sessiond.service \
            "
 
 SRC_URI[sha256sum] = "ea9a742d9458849f0e4bf1d88f54120a46f919baced207493f71b9cbb9652992"
