@@ -16,8 +16,8 @@ fi
 # USB_MODE is defined in $USB_CONF which will be added by HDL Verifier APIs for board setup
 # Also check if the USB dr_mode is peripheral. In peripheral mode, /sys/class/udc is not empty
 #as it lists the USB Device Controller devices.
-
-if [ "$USB_MODE" == "EthernetDevice" ] && [ "$(ls -A /sys/class/udc | wc -l)" -ne 0 ];
+UDCNAME=$(ls -A /sys/class/udc)
+if [ "$USB_MODE" == "EthernetDevice" ] && [ "${UDCNAME}" != "" ];
 then
 	echo "### USB_MODE is EthernetDevice"
 else
@@ -51,18 +51,7 @@ case "$1" in
 	
 	mkdir -p $GADGET/configs/c1.1
 	ln -s $GADGET/functions/rndis.rn0 $GADGET/configs/c1.1
-	#!/bin/sh
-	zynqmpDev=$(find /sys/devices -name "fe200000.dwc3")
-	if [ "${zynqmpDev}" != "" ];
-	then
-		echo "fe200000.dwc3" > $GADGET/UDC
-	else
-		zynq7000Dev=$(find /sys/devices -name "ci_hdrc.0")
-		if [ "${zynq7000Dev}" != "" ];
-		then
-			echo "ci_hdrc.0" > $GADGET/UDC
-		fi
-	fi
+	echo "${UDCNAME}" > $GADGET/UDC
 	ip link set dev usb0 mtu 15300
 	[ $? = 0 ] && echo "OK" || echo "FAIL"
 	;;
