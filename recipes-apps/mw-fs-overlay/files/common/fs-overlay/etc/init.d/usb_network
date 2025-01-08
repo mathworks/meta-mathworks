@@ -18,7 +18,7 @@ create_system_files () {
 	if [ "$USB_MODE" == "EthernetDevice" ] && [ "$(ls -A /sys/class/udc | wc -l)" -ne 0 ]
 	then 
 		UDHCPD_CONF=/etc/udhcpd.conf
-		IFACE=/etc/network/interfaces
+		IFAC=/etc/network/interfaces
 		NETMASK=`fw_printenv -n netmask 2> /dev/null || echo 255.255.255.0`
 		### Replace /etc/udhcpd.conf ###
 		echo "start $USB_IPADDR_HOST" > $UDHCPD_CONF
@@ -27,7 +27,7 @@ create_system_files () {
 		echo "option subnet $NETMASK" >> $UDHCPD_CONF
 		### /etc/network/interfaces ###
 		echo -e "auto usb0\n""iface usb0 inet static" >> $IFAC
-		echo -e "\taddress $USB_IPADDR_TARGET\n""\tnetmask $NETMASK\n" >> $IFACE
+		echo -e "\taddress $USB_IPADDR_TARGET\n""\tnetmask $NETMASK\n" >> $IFAC
 	else
 		exit 0
 	fi
@@ -36,18 +36,12 @@ create_system_files () {
 case "$1" in
   start)
  	echo "Starting USB Ethernet..."
-	create_system_files()
-	if [ -f ${USB_CONF} ];
-	then
-		modprobe -a g_ether
-	fi
+	create_system_files
+	modprobe g_ether
 	;;
   stop)
 	echo "Stopping USB Ethernet..."
-	if [ -f ${USB_CONF} ];
-	then
-		modprobe -r g_ether 2>/dev/null
-	fi
+	modprobe -r g_ether 2>/dev/null
 	;;
   restart|reload)
 	"$0" stop
