@@ -20,7 +20,7 @@ case "$1" in
 	;;
   stop)
 	echo "Stopping udhcpd..."
-	pkill /usr/sbin/udhcpd
+	pkill udhcpd
 	;;
   restart|reload)
 	"$0" stop

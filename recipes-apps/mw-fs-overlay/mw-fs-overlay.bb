@@ -60,7 +60,7 @@ do_install() {
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/backupSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/restoreSSHKeys  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/hostname  ${D}${sbindir}/update_hostname
-		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/udhcpd ${D}${sbindir}/start_udhcpd
+		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/udhcpd ${D}${sbindir}/udhcpd_script
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/network_scripts  ${D}${sbindir}/
 		install -m 0755 ${WORKDIR}/common/fs-overlay/etc/init.d/sdcard_mount  ${D}${sbindir}/

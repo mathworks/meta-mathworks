@@ -6,6 +6,7 @@ Documentation=man:systemd-sysv-generator(8)
 SourcePath=/usr/sbin/udc_setup
 Requires=sys-kernel-config.mount
 After=sys-kernel-config.mount
+Before=network.service
 
 [Service]
 Type=forking
@@ -20,5 +21,5 @@ ExecStop=/usr/sbin/udc_setup stop
 StandardOutput=journal+console
 
 [Install]
-WantedBy=usb-gadget.target
+WantedBy=multi-user.target
 
