@@ -3,6 +3,7 @@
 [Unit]
 Documentation=man:systemd-sysv-generator(8)
 SourcePath=/usr/sbin/start_udhcpd
+After=usb_network.service
 After=network.service
 
 [Service]
@@ -13,8 +14,8 @@ IgnoreSIGPIPE=no
 KillMode=process
 GuessMainPID=no
 RemainAfterExit=yes
-ExecStart=start_udhcpd start
-ExecStop=start_udhcpd stop
+ExecStart=/usr/sbin/udhcpd_script start
+ExecStop=/usr/sbin/udhcpd_script stop
 StandardOutput=journal+console
 
 [Install]
