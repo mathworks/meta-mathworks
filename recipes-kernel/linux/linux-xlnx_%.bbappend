@@ -31,6 +31,7 @@ SRC_URI:append = " file://fpgamgr.cfg  \
        file://usb_gadget.cfg        \
        file://0001-drivers-dma-Remove-partial-transfers-for-ADI-DMAC.patch \
        file://0002-drivers-misc-mathworks-Update-get_irq-reset-tlast.patch \
+       file://0003-drivers-dma-xilinx-Add-chan-directions.patch \
        "
 
 
