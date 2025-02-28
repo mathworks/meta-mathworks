@@ -5,9 +5,13 @@ IMAGE_INSTALL:append = " busybox-udhcpd busybox-udhcpc busybox-inetd"
 IMAGE_INSTALL:append = " libusb-compat libserialport libiio libiio-iiod libiio-tests "
 IMAGE_INSTALL:append = " lttng-ust lttng-ust-bin lttng-tools lttng-modules"
 IMAGE_INSTALL:append = " avahi-utils avahi-daemon avahi-autoipd"
+IMAGE_INSTALL:append = " libsysfs sysfsutils libmetal libconfig"
 IMAGE_INSTALL:append = " dtc"
 IMAGE_INSTALL:append = " procps"
-IMAGE_INSTALL:append = " libsysfs sysfsutils libmetal libconfig"
+IMAGE_INSTALL:append = " i2c-tools"
+IMAGE_INSTALL:append = " os-release"
+IMAGE_INSTALL:append = " gdbserver"
+
 
 
 inherit extrausers
