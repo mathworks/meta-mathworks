@@ -1,8 +1,17 @@
+From b56e6003355023d7dbd34643045c4ef5d5fb940e Mon Sep 17 00:00:00 2001
+From: pusaxena <pusaxena@mathworks.com>
+Date: Thu, 27 Feb 2025 00:58:46 +0530
+Subject: [PATCH] drivers/dma/xilinx: Add chan directions
+
+---
+ drivers/dma/xilinx/xilinx_dma.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
 diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-index 97055271d8fa..6b139bdae02b 100644
+index 0a3b2e22f23d..5caae73744b9 100644
 --- a/drivers/dma/xilinx/xilinx_dma.c
 +++ b/drivers/dma/xilinx/xilinx_dma.c
-@@ -2814,6 +2814,7 @@ static int xilinx_dma_chan_probe(struct xilinx_dma_device *xdev,
+@@ -2855,6 +2855,7 @@ static int xilinx_dma_chan_probe(struct xilinx_dma_device *xdev,
  	    of_device_is_compatible(node, "xlnx,axi-dma-mm2s-channel") ||
  	    of_device_is_compatible(node, "xlnx,axi-cdma-channel")) {
  		chan->direction = DMA_MEM_TO_DEV;
@@ -10,7 +19,7 @@ index 97055271d8fa..6b139bdae02b 100644
  		chan->id = xdev->mm2s_chan_id++;
  		chan->tdest = chan->id;
  
-@@ -2831,6 +2832,7 @@ static int xilinx_dma_chan_probe(struct xilinx_dma_device *xdev,
+@@ -2872,6 +2873,7 @@ static int xilinx_dma_chan_probe(struct xilinx_dma_device *xdev,
  		   of_device_is_compatible(node,
  					   "xlnx,axi-dma-s2mm-channel")) {
  		chan->direction = DMA_DEV_TO_MEM;
@@ -18,3 +27,6 @@ index 97055271d8fa..6b139bdae02b 100644
  		chan->id = xdev->s2mm_chan_id++;
  		chan->tdest = chan->id - xdev->dma_config->max_channels / 2;
  		chan->has_vflip = of_property_read_bool(node,
+-- 
+2.25.1
+

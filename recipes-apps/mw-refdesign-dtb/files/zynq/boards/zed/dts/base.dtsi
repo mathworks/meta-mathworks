@@ -1,6 +1,13 @@
 #include "zynq-zed.dts"
 #include "zynq-mw-common.dtsi"
 #include "zynq-mw-axilite-common.dtsi"
+
+/ {
+        chosen {
+                bootargs = "earlycon root=/dev/ram rw cma=128M";
+        };
+};
+
 &mwipcore0 {
 	reg = <0x400D0000 0xffff>;
 };

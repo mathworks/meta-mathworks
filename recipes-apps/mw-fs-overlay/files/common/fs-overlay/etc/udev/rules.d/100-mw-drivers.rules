@@ -1,2 +1,8 @@
 # map mwipcore0 to mwipcore for legacy models
- KERNEL=="mwipcore0", SYMLINK+="mwipcore"
+KERNEL=="mwipcore0", SYMLINK+="mwipcore"
+KERNEL=="mwipcore_frame_buffer0", SYMLINK+="mwipcore_frame_buffer"
+KERNEL=="mwipcore_framecapture0", SYMLINK+="mwipcore_framecapture"
+KERNEL=="mwipcore_hdmi_out0", SYMLINK+="mwipcore_hdmi_out"
+KERNEL=="mwipcore_dutbypass0", SYMLINK+="mwipcore_dutbypass"
+KERNEL=="mwipcore_hdmi_in0", SYMLINK+="mwipcore_hdmi_in"
+KERNEL=="mwipcore_tpg0", SYMLINK+="mwipcore_tpg"

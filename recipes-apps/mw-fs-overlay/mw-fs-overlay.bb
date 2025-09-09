@@ -39,7 +39,7 @@ SERVICEUNITS = "sdcard_mount.service usb_network.service \
  inetd.service user_app.service nfs-common.service hostname.service \
  backupSSHKeys.service restoreSSHKeys.service udc.service "
 
-SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('INIT_MANAGER','systemd','${SERVICEUNITS}','" "',d)}"
+SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('INIT_MANAGER','systemd','${SERVICEUNITS}','',d)}"
 
 do_install() {
 	chmod -R 0755 ${WORKDIR}/common/fs-overlay/usr/sbin/
