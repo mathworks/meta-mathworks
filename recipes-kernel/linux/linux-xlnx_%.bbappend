@@ -35,6 +35,7 @@ SRC_URI:append:zynq = " file://fpgamgr.cfg  \
        file://0004-industrialio-buffer-dma-improvements.patch  \
        file://0005-Apply-patch-to-update-adv7604.c-for-720p30-support.patch \
        file://0006-patch-for-IPCore-Interrupt-driver.patch \
+       file://0007-patch-xilinx-dma.patch \
        file://adrv-conf.cfg            \
        file://hdmi-imageon.cfg         \
        file://drivers.cfg              \
@@ -51,6 +52,7 @@ SRC_URI:append:zynqmp = " file://fpgamgr.cfg  \
        file://0004-industrialio-buffer-dma-improvements.patch  \
        file://0005-Apply-patch-to-update-adv7604.c-for-720p30-support.patch \
        file://0006-patch-for-IPCore-Interrupt-driver.patch \
+       file://0007-patch-xilinx-dma.patch \
        file://adrv-conf.cfg            \
        file://hdmi-imageon.cfg         \
        file://drivers.cfg              \
