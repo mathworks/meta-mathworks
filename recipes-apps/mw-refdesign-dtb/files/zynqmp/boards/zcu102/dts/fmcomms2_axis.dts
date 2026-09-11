@@ -1,2 +1,8 @@
 #include "fmcomms2.dts"
 #include "zynqmp-mw-ad9361-axis.dtsi"
+&axi4stream_mm2s{
+	interrupts = <0x00 0x59 0x04>;
+};
+&axi4stream_s2mm{
+	interrupts = <0x00 0x5a 0x04>;
+};

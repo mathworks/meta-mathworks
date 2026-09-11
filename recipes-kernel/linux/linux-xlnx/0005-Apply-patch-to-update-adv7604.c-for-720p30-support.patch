@@ -1,0 +1,32 @@
+From 000da3f797e898bed979398a228be757363e25d7 Mon Sep 17 00:00:00 2001
+From: pusaxena <pusaxena@mathworks.com>
+Date: Wed, 30 Apr 2025 00:40:54 +0530
+Subject: [PATCH] Apply patch to update adv7604.c for 720p30 support
+
+---
+ drivers/media/i2c/adv7604.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
+index 58d22ac94893..b9730a2e5a81 100644
+--- a/drivers/media/i2c/adv7604.c
++++ b/drivers/media/i2c/adv7604.c
+@@ -221,7 +221,6 @@ static bool adv76xx_has_afe(struct adv76xx_state *state)
+ 
+ /* Unsupported timings. This device cannot support 720p30. */
+ static const struct v4l2_dv_timings adv76xx_timings_exceptions[] = {
+-	V4L2_DV_BT_CEA_1280X720P30,
+ 	{ }
+ };
+ 
+@@ -290,6 +289,7 @@ static const struct adv76xx_video_standards adv76xx_prim_mode_hdmi_comp[] = {
+ 	{ V4L2_DV_BT_CEA_720X576P50, 0x0b, 0x00 },
+ 	{ V4L2_DV_BT_CEA_1280X720P24, 0x13, 0x04 },
+ 	{ V4L2_DV_BT_CEA_1280X720P25, 0x13, 0x03 },
++	{ V4L2_DV_BT_CEA_1280X720P30, 0x13, 0x02 },
+ 	{ V4L2_DV_BT_CEA_1280X720P50, 0x13, 0x01 },
+ 	{ V4L2_DV_BT_CEA_1280X720P60, 0x13, 0x00 },
+ 	{ V4L2_DV_BT_CEA_1920X1080P24, 0x1e, 0x04 },
+-- 
+2.25.1
+

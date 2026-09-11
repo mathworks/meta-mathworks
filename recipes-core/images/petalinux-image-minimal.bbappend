@@ -11,8 +11,7 @@ IMAGE_INSTALL:append = " procps"
 IMAGE_INSTALL:append = " i2c-tools"
 IMAGE_INSTALL:append = " os-release"
 IMAGE_INSTALL:append = " gdbserver"
-
-
+IMAGE_INSTALL:append = " libad9361-iio"
 
 inherit extrausers
 # Set root password as "root" (argument -p for usermod is obtained using 'mkpasswd -m sha-512 root')
