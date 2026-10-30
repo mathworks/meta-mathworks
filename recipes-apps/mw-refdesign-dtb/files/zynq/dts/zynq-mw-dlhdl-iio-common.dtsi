@@ -1,14 +1,14 @@
 &fpga_axi {
-		mwipcore_ddr0: mwipcore_ddr@0 {
-			compatible = "mathworks,mwipcore-v2.00";
-			reg = <0x40010000 0x10000>;
-		};
+                mwipcore_dl0: mwipcore_dl@0 {
+                        compatible = "mathworks,mwipcore-v2.00";
+                        reg = <0x44A00000 0x10000>;
+                };
 };
 
 &fpga_axi {
-		mwipcore_dl0: mwipcore_dl@0 {
+		mwipcore_ddr0: mwipcore_ddr@0 {
 			compatible = "mathworks,mwipcore-v2.00";
-			reg = <0x44A00000 0x10000>;
+			reg = <0x40010000 0x10000>;
 		};
 };
 

@@ -1,0 +1,26 @@
+From 20ea8542251deaadf66a88e9c45a0a255e7f8f64 Mon Sep 17 00:00:00 2001
+From: pusaxena <pusaxena@mathworks.com>
+Date: Thu, 27 Feb 2025 02:21:16 +0530
+Subject: [PATCH] Manually applied patch for industrialio buffer dma
+ improvements
+
+---
+ drivers/iio/buffer/industrialio-buffer-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iio/buffer/industrialio-buffer-dma.c b/drivers/iio/buffer/industrialio-buffer-dma.c
+index c1c4ca5798b2..30702c360144 100644
+--- a/drivers/iio/buffer/industrialio-buffer-dma.c
++++ b/drivers/iio/buffer/industrialio-buffer-dma.c
+@@ -91,7 +91,7 @@
+  * callback is called from within the custom callback.
+  */
+ 
+-static unsigned int iio_dma_buffer_max_block_size = SZ_16M;
++static unsigned int iio_dma_buffer_max_block_size = SZ_128M;
+ module_param_named(max_block_size, iio_dma_buffer_max_block_size, uint, 0644);
+ 
+ static void iio_buffer_block_release(struct kref *kref)
+-- 
+2.25.1
+

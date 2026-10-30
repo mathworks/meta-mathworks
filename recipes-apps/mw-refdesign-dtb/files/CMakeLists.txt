@@ -46,6 +46,7 @@ list(APPEND SUPPORTED_BOARDS
   zc706
   zc702
   zed
+  zcu106_imx
 )
 
 foreach (b IN LISTS SUPPORTED_BOARDS)

@@ -2,7 +2,7 @@
 &fpga_axi {
     mwbypassrx0: mwbypassrx@0 { 
         compatible = "mathworks,mwipcore-v3.00";
-        reg = <0x0 0x80000000 0x10000>;
+        reg = <0x80000000 0x10000>;
         #address-cells = <1>;
         #size-cells = <0>;
         mmrd-channel@0 {
@@ -18,7 +18,7 @@
     };
     mwbypasstx0: mwbypasstx@0 { 
         compatible = "mathworks,mwipcore-v3.00";
-        reg = <0x0 0x80000000 0x10000>;
+        reg = <0x80000000 0x10000>;
         #address-cells = <1>;
         #size-cells = <0>;
         mmrd-channel@0 {

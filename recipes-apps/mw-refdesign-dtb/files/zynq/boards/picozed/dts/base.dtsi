@@ -1,5 +1,6 @@
 /dts-v1/;
 
+#include "zynq.dtsi"
 #include "zynq-picozed.dtsi"
 #include "zynq-mw-common.dtsi"
 

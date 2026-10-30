@@ -1,0 +1,28 @@
+From 6c48481533f1a6fd21269289c49b65895039322a Mon Sep 17 00:00:00 2001
+From: pusaxena <pusaxena@mathworks.com>
+Date: Wed, 30 Apr 2025 10:40:36 +0530
+Subject: [PATCH] patch for IPCore Interrupt driver
+
+---
+ drivers/misc/mathworks/mathworks_ip_common.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/misc/mathworks/mathworks_ip_common.c b/drivers/misc/mathworks/mathworks_ip_common.c
+index cf3ae148e36e..abcb745515d5 100644
+--- a/drivers/misc/mathworks/mathworks_ip_common.c
++++ b/drivers/misc/mathworks/mathworks_ip_common.c
+@@ -52,7 +52,10 @@ static irqreturn_t mathworks_ip_intr_handler(int irq, void * theIpcore)
+        /* thisIpcore->irq is starting Linux INT number for that DUT */
+        /* Difference irq - thisIpcore->irq is relattive INT number as described above */
+        /*relativeIntIndex = irq - thisIpcore->irq; currently supporting one Interrupt per DUT */
+-       sysfs_notify_dirent(thisIpcore->irq_kn[0]);
++       if (thisIpcore->irq_kn[0])
++       {
++	       sysfs_notify_dirent(thisIpcore->irq_kn[0]);
++       }
+        return IRQ_HANDLED;
+ }
+ 
+-- 
+2.25.1
+

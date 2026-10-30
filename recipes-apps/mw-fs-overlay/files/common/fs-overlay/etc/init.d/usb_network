@@ -19,7 +19,10 @@ create_system_files () {
 	then 
 		UDHCPD_CONF=/etc/udhcpd.conf
 		IFAC=/etc/network/interfaces
-		NETMASK=`fw_printenv -n netmask 2> /dev/null || echo 255.255.255.0`
+		NETMASK=`echo $NET_MASK`
+		if [ -z "$NETMASK" ]; then
+			NETMASK="255.255.255.0"
+		fi
 		### Replace /etc/udhcpd.conf ###
 		echo "start $USB_IPADDR_HOST" > $UDHCPD_CONF
 		echo "end $USB_IPADDR_HOST" >> $UDHCPD_CONF

@@ -1,0 +1,8 @@
+#define CONFIG_ONE_PPC
+
+#include "base.dtsi"
+#include "imx274/system-top.dtsi"
+/{
+    model = "IMX274MIPI-FMC ZynqMP ZCU106 RevA";
+};
+
